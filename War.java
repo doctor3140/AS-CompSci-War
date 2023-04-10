@@ -14,7 +14,7 @@ public class War
         
         //int tests=0;
         
-        String[] cliArgs = {"--help", "-h", "-rules","-setTime"};
+        String[] cliArgs = {"--help", "-h", "--rules","--setTime", "--worksCited"};
         
         //if((args.length>0)&&(args[0].equals(cliArgs))){
             
@@ -27,6 +27,9 @@ public class War
 	}
         
         else{
+	int time=1;
+	if((args.length>0)&&(indexArg(args, "--setTime")!=-1))
+		time=Integer.valueOf(args[indexArg(args, "--setTime")+1]);
         Deck mine = new Deck();
         //mine.printDeck();
         mine.shuffle();
@@ -48,7 +51,7 @@ public class War
             //Card mineCurrent = mine.getNextCard();
             //Card theirsCurrent = theirs.getNextCard();
             System.out.println("You Drew a "+mine.getNextCard().getName());
-            suspense(1);
+            suspense(time);
             System.out.println("Opponent Drew a "+theirs.getNextCard().getName());
             
             if(theirs.getNextCard().compare(mine.getNextCard())){
@@ -67,7 +70,7 @@ public class War
                 System.out.println("WAR!!");
                 wars++;
                 System.out.println("You Drew a "+mine.getNextCard(1).getName());
-                suspense(1);
+                suspense(time);
                 System.out.println("Opponent Drew a "+theirs.getNextCard(1).getName());
                 if(theirs.getNextCard(1).compare(mine.getNextCard(1))){
                     System.out.println("You lost the Exchange\n");
@@ -147,4 +150,12 @@ public class War
 		return arg;
     }
 
+    public static int indexArg(String[] args, String arg){
+    int index=-1;
+    	for(int argsI=0; argsI<args.length; argsI++){
+		if(arg.equals(args[argsI]))
+			index=argsI;
+	}
+		return index;
+    }
 }
