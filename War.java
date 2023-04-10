@@ -14,16 +14,16 @@ public class War
         
         //int tests=0;
         
-        String[] cliArgs = {"-help", "-set time"};
+        String[] cliArgs = {"--help", "-h", "-rules","-setTime"};
         
         //if((args.length>0)&&(args[0].equals(cliArgs))){
             
-	if((args.length>0)&&(args[0].equals("-help"))){
-		System.out.println("This a simulation of the card game War. To start the game simply run the game without the -help parameter or with another valid parameter and press enter to begin.");
+	if((args.length>0)&&((args[0].equals("--help"))||(args[0].equals("-h")))){
+		System.out.println("This a simulation of the card game War. To start the game simply run the game without the --help or -h parameter or with another valid parameter and press enter to begin.");
         }
 
-	else if((args.length>0)&&(!args[0].equals("-help"))){
-		System.out.println("Try using the -help argument for more options. EX: java War -help");
+	else if((args.length>0)&&(invalidArg(args, cliArgs))){
+		System.out.println("Try using the -help or -h argument for more options. EX: java War --help");
 	}
         
         else{
@@ -135,9 +135,16 @@ public class War
         }
         System.out.print("\n");
     }
-/*
-    public static int argIndex(String[] list){
-    	for(int argsI=0; argsI<args.length; argsI++)
+
+    public static boolean invalidArg(String[] args, String[] cliArgs){
+    boolean arg=true;
+    	for(int argsI=0; argsI<args.length; argsI++){
+	for(int cliArgsI=0; cliArgsI<cliArgs.length; cliArgsI++){
+		if(cliArgs[cliArgsI].equals(args[argsI]))
+			arg=false;
+	}
+	}
+		return arg;
     }
-*/
+
 }
