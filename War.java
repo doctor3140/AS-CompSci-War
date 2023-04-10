@@ -14,13 +14,22 @@ public class War
         
         //int tests=0;
         
-        String[] cliArgs = {"--help", "-h", "--rules","--setTime", "--worksCited"};
+        String[] cliArgs = {"--help", "-h", "--rules","--setTime", "--worksCited", "--interact"};
         
         //if((args.length>0)&&(args[0].equals(cliArgs))){
             
 	if((args.length>0)&&((args[0].equals("--help"))||(args[0].equals("-h")))){
-		System.out.println("This a simulation of the card game War. To start the game simply run the game without the --help or -h parameter or with another valid parameter and press enter to begin.");
+		System.out.println("Usage: java War [args...]");
+		System.out.println("--help or -h \t print this help message");
+		System.out.println("--rules \t print rules of the game");
+		System.out.println("--worksCited \t prints sources used for the project");
+		System.out.println("--setTime <int>  sets the time inbetween 'suspense dots'");
+		System.out.println("--interact \t requires manual inputs for drawing cards");
         }
+
+	else if((args.length>0)&&((args[0].equals("--rules")))){
+		System.out.println("This a simulation of the card game War. To start the game simply run the game without the --help or -h parameter or with another valid parameter and press enter to begin. The goal of the game is to end with all the cards between both decks. Two of 52 decks are used for this game, each shuffled before play. Each player draws a card and places it down. Whichever player has the higher value card in order <Ace, King, Queen, Jack, 10, 9, 8, 7, 6, 5, 4, 3, 2> take back their own card and get the other player's card, returning both to the back of their deck. If the cards tie then 'War' begins. Players draw two more cards and each reveal one. The player with the higher value card will take all 6 cards. If there is another tie all cards will 'die.' This is not a typical rule for War, but results in faster games. One exception for enter 'War' is if a player has less than 3 cards. If this is the case the player with only 3 cards loses. Enjoy and try out other parameters to change the game experience!"); 
+	}
 
 	else if((args.length>0)&&(invalidArg(args, cliArgs))){
 		System.out.println("Try using the -help or -h argument for more options. EX: java War --help");
@@ -42,12 +51,19 @@ public class War
         //System.out.println("Theirs: \n");
         //theirs.printDeck();
         //System.out.println("\n"+theirs.getSize());
-        
-        Scanner input = new Scanner(System.in);
-        System.out.println("Press Enter to Play War: ");
-        String NA = input.nextLine();
-        
+       
+	Scanner input = new Scanner(System.in);
+	
+	if(indexArg(args, "--interact")==-1){
+        	System.out.println("Press Enter to Play War: ");
+        	String NA = input.nextLine();
+	} 
+
         while(!mine.lose()&&!theirs.lose()){
+		if(indexArg(args, "--interact")!=-1){
+        		System.out.println("Press Enter to Draw:");
+        		String NA = input.nextLine();
+		} 
             //Card mineCurrent = mine.getNextCard();
             //Card theirsCurrent = theirs.getNextCard();
             System.out.println("You Drew a "+mine.getNextCard().getName());
