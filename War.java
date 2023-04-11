@@ -15,7 +15,7 @@ public class War
 	int ties=0;
 	int games=1;
         
-        String[] cliArgs = {"--help", "-h", "--rules","--setTime", "--worksCited", "--interact", "--setGames"};
+        String[] cliArgs = {"--help", "-h", "--rules","--setTime", "--worksCited", "--interact", "--setGames", "--noDisplay", "--noSuspense"};
         
             
 	if((args.length>0)&&((args[0].equals("--help"))||(args[0].equals("-h")))){
@@ -25,6 +25,9 @@ public class War
 		System.out.println("--worksCited \t prints link to sources used for the project");
 		System.out.println("--setTime <int>  sets the time inbetween 'suspense dots'");
 		System.out.println("--interact \t requires manual inputs for drawing cards");
+		System.out.println("--setGames <int> sets the amount of games of war to play");
+		System.out.println("--noDisplay \t turns off display for turns");
+		System.out.println("--noSuspense \t removes all suspense");
         }
 
 	else if((args.length>0)&&((args[0].equals("--rules")))){
@@ -41,14 +44,23 @@ public class War
  
         else{
 	int time=1;
+	int time2=500;
+	int time3=700;
 
 	if((args.length>0)&&(indexArg(args, "--setTime")!=-1)){
 		time=Integer.valueOf(args[indexArg(args, "--setTime")+1]);
 	}
+
+	if((args.length>0)&&(indexArg(args, "--noSuspense")!=-1)){
+		time=0;
+		time2=0;
+		time3=0;
+	}
+
 	if((args.length>0)&&(indexArg(args, "--setGames")!=-1)){
 		games=Integer.valueOf(args[indexArg(args, "--setGames")+1]);
 	}
-	//for(int g=0; g<games; g++){
+	for(int g=0; g<games; g++){
         Deck mine = new Deck();
         //mine.printDeck();
         mine.shuffle();
@@ -62,49 +74,57 @@ public class War
         //theirs.printDeck();
         //System.out.println("\n"+theirs.getSize());
        
-	//Scanner input = new Scanner(System.in); 
+	Scanner input = new Scanner(System.in); 
+	String n = "";
+
 	
-	//if(indexArg(args, "--interact")==-1){
-        	//System.out.println("Press Enter to Play War: ");
-        	//N = input.nextLine();
-	//} 
+	if((indexArg(args, "--interact")==-1)&&(g<1)){
+        	System.out.println("Press Enter to Play War: ");
+        	n = input.nextLine();
+	} 
 
         while(!mine.lose()&&!theirs.lose()){
 		
-		//if(indexArg(args, "--interact")!=-1){
-			Scanner input = new Scanner(System.in); 
-        		//System.out.println("Press Enter to Draw: ");
-			if(input.hasNextLine()){
-				String n = input.nextLine();
-			}
-		//} 
+		if(indexArg(args, "--interact")!=-1){
+        		System.out.println("Press Enter to Draw: ");
+			n = input.nextLine();
+		} 
 		
             //Card mineCurrent = mine.getNextCard();
             //Card theirsCurrent = theirs.getNextCard();
+	    if(indexArg(args, "--noDisplay")==-1){
             System.out.println("You Drew a "+mine.getNextCard().getName());
             suspense(time);
             System.out.println("Opponent Drew a "+theirs.getNextCard().getName());
-            
+	    }
             if(theirs.getNextCard().compare(mine.getNextCard())){
+		if(indexArg(args, "--noDisplay")==-1){
                 System.out.println("You lost the Exchange\n");
+		}
                 mine.giveCards(theirs);
                 cardsLost++;
                 turns++;
             }
             else if(mine.getNextCard().compare(theirs.getNextCard())){
-                System.out.println("You won the Exchange\n");
+		if(indexArg(args, "--noDisplay")==-1)
+                	System.out.println("You won the Exchange\n");
                 theirs.giveCards(mine);
                 cardsGained++;
                 turns++;
             }
             else if((theirs.getSize()>2)&&(mine.getSize()>2)){
-                System.out.println("WAR!!");
+		if(indexArg(args, "--noDisplay")==-1)
+                	System.out.println("WAR!!");
                 wars++;
+		if(indexArg(args, "--noDisplay")==-1){
                 System.out.println("You Drew a "+mine.getNextCard(1).getName());
                 suspense(time);
                 System.out.println("Opponent Drew a "+theirs.getNextCard(1).getName());
+		}
                 if(theirs.getNextCard(1).compare(mine.getNextCard(1))){
+		if(indexArg(args, "--noDisplay")==-1){
                     System.out.println("You lost the Exchange\n");
+		}
                     mine.giveCards(theirs);
                     mine.giveCards(theirs);
                     mine.giveCards(theirs);
@@ -112,80 +132,89 @@ public class War
                     turns++;
                 }
                 else if(mine.getNextCard(1).compare(theirs.getNextCard(1))){
+		if(indexArg(args, "--noDisplay")==-1){
                     System.out.println("You won the Exchange\n");
+		}
                     theirs.giveCards(mine);
                     theirs.giveCards(mine);
                     cardsGained+=3;
                     turns++;
                 }
                 else{
-                    System.out.println("Death Claims the Battlefield...\n");                    
+		if(indexArg(args, "--noDisplay")==-1){
+                    System.out.println("Death Claims the Battlefield...\n");                    	}
                     theirs.death();
                     mine.death();
                     deaths++;
                     cardsLost+=3;
                     turns++;
                 }
-                }
+	    	}
             else{
-                System.out.println("Cannot fight");
+		if(indexArg(args, "--noDisplay")==-1)
+                	System.out.println("Cannot fight");
                 lackOfCards++;
                 break;
             }
-                
+	if(indexArg(args, "--noDisplay")==-1){
             System.out.println("Your Cards: "+mine.getSize());
             System.out.println("Their Cards: "+theirs.getSize());
-            
+	}
         }
         if(theirs.lose()||(mine.getSize()>theirs.getSize())){
-            suspense(700);
+	if(indexArg(args, "--noDisplay")==-1){
+            suspense(time3);
             System.out.println("You Win!");
+	}
 	    wins++;
         }
         else if(mine.lose()||(theirs.getSize()>mine.getSize())){
-            suspense(700);
+	if(indexArg(args, "--noDisplay")==-1){
+            suspense(time3);
             System.out.println("You Lose!");
+	}
 	    loses++;
         }
         else{
-            suspense(700);
+	if(indexArg(args, "--noDisplay")==-1){
+            suspense(time3);
             System.out.println("War has claimed both sides");
+	}
 	    ties++;
         }
-	//}
+	}
         System.out.print("Game Stats: ");
-        suspense(500);
+        suspense(time2);
         System.out.print("Cards lost: "+cardsLost+"\nCards Gained: "+cardsGained+"\nWars: "+wars+"\nDeaths: "+deaths+"\nTotal Turns: "+turns);
-        suspense(500);
+        suspense(time2);
 
 	if(games>1){
-	System.out.print("Totals: ");
-	System.out.println("# of Games: "+games);
+	System.out.println("\n# of Games: "+games);
 	System.out.println("Wins: "+wins);
 	System.out.println("Loses: "+loses);
 	System.out.println("Ties: "+ties);
-	System.out.println("Total Turns: "+turns);
-	suspense(500);
+	suspense(time2);
 	System.out.print("Average Stats per Game: ");
-        suspense(500);
+        suspense(time2);
         System.out.print("Cards lost: "+(double)cardsLost/games+"\nCards Gained: "+(double)cardsGained/games+"\nWars: "+(double)wars/games+"\nDeaths: "+(double)deaths/games+"\nTurns: "+(double)turns/games);
-        suspense(500);
+        suspense(time2);
 	}
 
         System.out.print("\nWar");
-        suspense(700);
+        suspense(time3);
         System.out.print("war never changes");
-        suspense(700);
+        suspense(time3);
         }
     	}
 
     public static void suspense(int time)
     throws InterruptedException{
-        //int time = 10; //500 default
+	if(time>0){
         for(int i=0; i<3;i++){
         Thread.sleep(time);
         System.out.print(".");
         }
+	}
         System.out.print("\n");
     }
 
