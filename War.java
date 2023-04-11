@@ -137,6 +137,7 @@ public class War
 		}
                     theirs.giveCards(mine);
                     theirs.giveCards(mine);
+		    theirs.giveCards(mine);
                     cardsGained+=3;
                     turns++;
                 }
